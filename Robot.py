@@ -13,6 +13,7 @@ class MyRobot(wpilib.TimedRobot):
 
         # Define Things
         # TODO: Automate in the future: https://robotpy.readthedocs.io/projects/wpilib/en/stable/wpilib/CANStatus.html
+        # TODO: Automate by scanning data https://robotpy.readthedocs.io/projects/wpilib/en/stable/wpilib/CANData.html
         self.prefs = wpilib.Preferences()
         if self.prefs.containsKey("Spark_Max_Brushed"):
             self.CANSparkMaxType = rev.CANSparkMaxLowLevel.MotorType(int(self.prefs.getString("Spark_Max_Brushed")))
@@ -118,6 +119,8 @@ class MyRobot(wpilib.TimedRobot):
         # Start Network Tables Stuff
 
         def getNetworkTables():
+            # Define Dynamic values
+
             nonlocal self
             entries = self.smartDash.getEntries("")
             for preference in self.prefs.getKeys():
@@ -211,6 +214,49 @@ class MyRobot(wpilib.TimedRobot):
                                 self.prefs.initString("Front_Left_Motor", "0")
                                 self.CANSparkMaxType = rev.CANSparkMaxLowLevel.MotorType(
                                     0)  # 0 is Brushed and 1 is Brushless
+
+            # Define Static Variables
+            pdp = wpilib.PowerDistribution()  # Power Distribution Panel Data
+            if self.smartDash.containsKey("PDP_Total_Output_Joules"):
+                self.smartDash.putValue("PDP_Total_Output_Joules", pdp.getTotalEnergy())
+            else:
+                self.smartDash.setDefaultValue("PDP_Total_Output_Joules", 0)
+
+            if self.smartDash.containsKey("PDP_Temperature_Fahrenheit"):
+                self.smartDash.putValue("PDP_Temperature_Fahrenheit", pdp.getTemperature())
+            else:
+                self.smartDash.setDefaultValue("PDP_Temperature_Fahrenheit", 0)
+
+            if self.smartDash.containsKey("PDP_Total_Output_Amperage"):
+                self.smartDash.putValue("PDP_Total_Output_Amperage", pdp.getTotalCurrent())
+            else:
+                self.smartDash.setDefaultValue("PDP_Total_Output_Amperage", 0)
+
+            if self.smartDash.containsKey("PDP_Total_Output_Watts"):
+                self.smartDash.putValue("PDP_Total_Output_Watts", pdp.getTotalPower())
+            else:
+                self.smartDash.setDefaultValue("PDP_Total_Output_Watts", 0)
+
+            if self.smartDash.containsKey("PDP_Input_Voltage"):
+                self.smartDash.putValue("PDP_Input_Voltage", pdp.getVoltage())
+            else:
+                self.smartDash.setDefaultValue("PDP_Input_Voltage", 0)
+            del pdp
+            bia = wpilib.BuiltInAccelerometer()  # Built in Accelerometer
+            if self.smartDash.containsKey("RIO_Int_Accelerometer_XValue_MpS^2"):
+                self.smartDash.putValue("RIO_Int_Accelerometer_XValue_MpS^2", bia.getX())
+            else:
+                self.smartDash.setDefaultValue("RIO_Int_Accelerometer_XValue_MpS^2", 0)
+
+            if self.smartDash.containsKey("RIO_Int_Accelerometer_YValue_MpS^2"):
+                self.smartDash.putValue("RIO_Int_Accelerometer_YValue_MpS^2", bia.getY())
+            else:
+                self.smartDash.setDefaultValue("RIO_Int_Accelerometer_YValue_MpS^2", 0)
+
+            if self.smartDash.containsKey("RIO_Int_Accelerometer_ZValue_MpS^2"):
+                self.smartDash.putValue("RIO_Int_Accelerometer_ZValue_MpS^2", bia.getZ())
+            else:
+                self.smartDash.setDefaultValue("RIO_Int_Accelerometer_ZValue_MpS^2", 0)
 
         self.addPeriodic(getNetworkTables, 0.25, offset=2)
 
