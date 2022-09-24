@@ -10,8 +10,12 @@ class MyRobot(wpilib.TimedRobot):
 
         self.pdp = wpilib.PowerDistribution()
         self.bia = wpilib.BuiltInAccelerometer()
+        self.driverstation = wpilib.DriverStation()
         NetworkTables.initialize()
         self.smartDash = NetworkTables.getTable("SmartDashboard")
+
+        self.brownStain = False  # Brownout Sustain
+        self.brownoutDetection = True  # Enable Brownout Detection
 
         # Define Things
         # TODO: Automate in the future: https://robotpy.readthedocs.io/projects/wpilib/en/stable/wpilib/CANStatus.html
@@ -122,6 +126,7 @@ class MyRobot(wpilib.TimedRobot):
 
         def getNetworkTables():
             # Define Dynamic values
+            # TODO: Make update rate a non-persistant variable https://robotpy.readthedocs.io/projects/pynetworktables/en/stable/api.html#networktables.NetworkTablesInstance.setUpdateRate
 
             nonlocal self
             entries = self.smartDash.getEntries("")
@@ -217,6 +222,11 @@ class MyRobot(wpilib.TimedRobot):
                                 self.CANSparkMaxType = rev.CANSparkMaxLowLevel.MotorType(
                                     0)  # 0 is Brushed and 1 is Brushless
 
+            # Brownout Stuff
+
+            if "Brownout_Detection" not in entries:
+                self.smartDash.putValue("Brownout_Detection", True)
+
             # Define Static Variables
             if self.smartDash.containsKey("PDP_Total_Output_Joules"):
                 self.smartDash.putValue("PDP_Total_Output_Joules", self.pdp.getTotalEnergy())
@@ -242,6 +252,12 @@ class MyRobot(wpilib.TimedRobot):
                 self.smartDash.putValue("PDP_Input_Voltage", self.pdp.getVoltage())
             else:
                 self.smartDash.setDefaultValue("PDP_Input_Voltage", 0)
+
+            if self.smartDash.containsKey("Battery_Percentage"):
+                self.smartDash.putValue("Battery_Percentage", (self.pdp.getVoltage()-6.8)/5.2)
+            else:
+                self.smartDash.setDefaultValue("Battery_Percentage", 0)
+
             if self.smartDash.containsKey("RIO_Int_Accelerometer_XValue_MpS^2"):
                 self.smartDash.putValue("RIO_Int_Accelerometer_XValue_MpS^2", self.bia.getX())
             else:
@@ -258,12 +274,28 @@ class MyRobot(wpilib.TimedRobot):
                 self.smartDash.setDefaultValue("RIO_Int_Accelerometer_ZValue_MpS^2", 0)
 
         def brownoutDetection():
-            pass
+            nonlocal self
+            if self.smartDash.getValue("Brownout_Detection"):
+                if self.smartDash.containsKey("Brownout"):
+                    if self.driverstation.getBatteryVoltage() < 6.8:
+                        self.smartDash.putValue("Brownout", "BROWNOUT WARNING")
+                        self._Front_Left_Motor.set(0)
+                        self._Front_Right_Motor.set(0)
+                        self._Back_Right_Motor.set(0)
+                        self._Back_Left_Motor.set(0)
+                        self._Shooter_Motor.set(0)
+                        self._Intake_Motor.set(0)
+                else:
+                    self.smartDash.setDefaultValue("Brownout", "Not Detected")
+            else:
+                self.smartDash.delete("Brownout")
 
         # Initialize Network Tables Interaction 2 seconds after init. Cycles every 0.25 seconds
         self.addPeriodic(getNetworkTables, 0.25, offset=2)
-        # Initialize Brownout Detection 2 seconds after init. Cycles every 0.25 seconds
-        self.addPeriodic(getNetworkTables, 0.25, offset=2)
+        # Flush Data every 5 seconds for synchronizing network updates
+        self.addPeriodic(NetworkTables.flush, 5)
+        # Initialize Brownout Detection 1 seconds after init. Cycles every 0.25 seconds
+        self.addPeriodic(brownoutDetection, 0.25, offset=1)
 
         # Define Game Stuff getJoystickIsXbox()
         self.controller = wpilib.XboxController(0)
