@@ -257,6 +257,7 @@ class MyRobot(wpilib.TimedRobot):
                 self.smartDash.putValue("RIO_Int_Accelerometer_ZValue_MpS^2", bia.getZ())
             else:
                 self.smartDash.setDefaultValue("RIO_Int_Accelerometer_ZValue_MpS^2", 0)
+            del bia
 
         self.addPeriodic(getNetworkTables, 0.25, offset=2)
 
