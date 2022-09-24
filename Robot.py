@@ -8,6 +8,8 @@ class MyRobot(wpilib.TimedRobot):
 
     def robotInit(self):
 
+        self.pdp = wpilib.PowerDistribution()
+        self.bia = wpilib.BuiltInAccelerometer()
         NetworkTables.initialize()
         self.smartDash = NetworkTables.getTable("SmartDashboard")
 
@@ -216,48 +218,44 @@ class MyRobot(wpilib.TimedRobot):
                                     0)  # 0 is Brushed and 1 is Brushless
 
             # Define Static Variables
-            pdp = wpilib.PowerDistribution()  # Power Distribution Panel Data
             if self.smartDash.containsKey("PDP_Total_Output_Joules"):
-                self.smartDash.putValue("PDP_Total_Output_Joules", pdp.getTotalEnergy())
+                self.smartDash.putValue("PDP_Total_Output_Joules", self.pdp.getTotalEnergy())
             else:
                 self.smartDash.setDefaultValue("PDP_Total_Output_Joules", 0)
 
             if self.smartDash.containsKey("PDP_Temperature_Fahrenheit"):
-                self.smartDash.putValue("PDP_Temperature_Fahrenheit", pdp.getTemperature())
+                self.smartDash.putValue("PDP_Temperature_Fahrenheit", self.pdp.getTemperature())
             else:
                 self.smartDash.setDefaultValue("PDP_Temperature_Fahrenheit", 0)
 
             if self.smartDash.containsKey("PDP_Total_Output_Amperage"):
-                self.smartDash.putValue("PDP_Total_Output_Amperage", pdp.getTotalCurrent())
+                self.smartDash.putValue("PDP_Total_Output_Amperage", self.pdp.getTotalCurrent())
             else:
                 self.smartDash.setDefaultValue("PDP_Total_Output_Amperage", 0)
 
             if self.smartDash.containsKey("PDP_Total_Output_Watts"):
-                self.smartDash.putValue("PDP_Total_Output_Watts", pdp.getTotalPower())
+                self.smartDash.putValue("PDP_Total_Output_Watts", self.pdp.getTotalPower())
             else:
                 self.smartDash.setDefaultValue("PDP_Total_Output_Watts", 0)
 
             if self.smartDash.containsKey("PDP_Input_Voltage"):
-                self.smartDash.putValue("PDP_Input_Voltage", pdp.getVoltage())
+                self.smartDash.putValue("PDP_Input_Voltage", self.pdp.getVoltage())
             else:
                 self.smartDash.setDefaultValue("PDP_Input_Voltage", 0)
-            del pdp
-            bia = wpilib.BuiltInAccelerometer()  # Built in Accelerometer
             if self.smartDash.containsKey("RIO_Int_Accelerometer_XValue_MpS^2"):
-                self.smartDash.putValue("RIO_Int_Accelerometer_XValue_MpS^2", bia.getX())
+                self.smartDash.putValue("RIO_Int_Accelerometer_XValue_MpS^2", self.bia.getX())
             else:
                 self.smartDash.setDefaultValue("RIO_Int_Accelerometer_XValue_MpS^2", 0)
 
             if self.smartDash.containsKey("RIO_Int_Accelerometer_YValue_MpS^2"):
-                self.smartDash.putValue("RIO_Int_Accelerometer_YValue_MpS^2", bia.getY())
+                self.smartDash.putValue("RIO_Int_Accelerometer_YValue_MpS^2", self.bia.getY())
             else:
                 self.smartDash.setDefaultValue("RIO_Int_Accelerometer_YValue_MpS^2", 0)
 
             if self.smartDash.containsKey("RIO_Int_Accelerometer_ZValue_MpS^2"):
-                self.smartDash.putValue("RIO_Int_Accelerometer_ZValue_MpS^2", bia.getZ())
+                self.smartDash.putValue("RIO_Int_Accelerometer_ZValue_MpS^2", self.bia.getZ())
             else:
                 self.smartDash.setDefaultValue("RIO_Int_Accelerometer_ZValue_MpS^2", 0)
-            del bia
 
         self.addPeriodic(getNetworkTables, 0.25, offset=2)
 
