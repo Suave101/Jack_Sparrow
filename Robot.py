@@ -257,6 +257,12 @@ class MyRobot(wpilib.TimedRobot):
             else:
                 self.smartDash.setDefaultValue("RIO_Int_Accelerometer_ZValue_MpS^2", 0)
 
+        def brownoutDetection():
+            pass
+
+        # Initialize Network Tables Interaction 2 seconds after init. Cycles every 0.25 seconds
+        self.addPeriodic(getNetworkTables, 0.25, offset=2)
+        # Initialize Brownout Detection 2 seconds after init. Cycles every 0.25 seconds
         self.addPeriodic(getNetworkTables, 0.25, offset=2)
 
         # Define Game Stuff getJoystickIsXbox()
