@@ -316,8 +316,13 @@ class MyRobot(wpilib.TimedRobot):
         #     self.drive.arcadeDrive(0, 0)  # Stop robot
 
     def teleopPeriodic(self):
-        # self.drive.arcadeDrive(self.stick.getY(), self.stick.getX())
-        pass
+        # TODO: Implement pnumatics and climber boi
+        self._Shooter_Motor.set(self.controller.getRightTriggerAxis())
+        self._Intake_Motor.set(self.controller.getLeftTriggerAxis())
+        self._Back_Left_Motor.set(self.controller.getLeftY())
+        self._Front_Left_Motor.set(self.controller.getLeftY())
+        self._Back_Right_Motor.set(self.controller.getRightY())
+        self._Front_Right_Motor.set(self.controller.getRightY())
 
 
 if __name__ == "__main__":
