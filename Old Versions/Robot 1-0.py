@@ -10,7 +10,7 @@ class MyRobot(wpilib.TimedRobot):
 
         self.pdp = wpilib.PowerDistribution()
         self.bia = wpilib.BuiltInAccelerometer()
-        self.driverStation = wpilib.DriverStation()
+        self.driverstation = wpilib.DriverStation()
         NetworkTables.initialize()
         self.smartDash = NetworkTables.getTable("SmartDashboard")
 
@@ -18,7 +18,6 @@ class MyRobot(wpilib.TimedRobot):
         self.brownoutDetection = True  # Enable Brownout Detection
 
         # Define Things
-        self.motors = [["SLY", 0, "SM"], ["SRY", 1, "SM"], ]
         # TODO: Automate in the future: https://robotpy.readthedocs.io/projects/wpilib/en/stable/wpilib/CANStatus.html
         # TODO: Automate by scanning data https://robotpy.readthedocs.io/projects/wpilib/en/stable/wpilib/CANData.html
         self.prefs = wpilib.Preferences()
@@ -43,6 +42,86 @@ class MyRobot(wpilib.TimedRobot):
         else:
             self.prefs.initString("Front_Left_Motor", "Spark_Max")
             self._Front_Left_Motor = rev.CANSparkMax(int(self.prefs.getString("Front_Left_Motor_ID")), self.CANSparkMaxType)
+        if self.prefs.containsKey("Front_Right_Motor"):
+            if self.prefs.containsKey("Front_Right_Motor_ID"):
+                pass
+            else:
+                self.prefs.initInt("Front_Right_Motor", "1")
+            if self.prefs.getString("Front_Right_Motor") == "Spark_Max":
+                self._Front_Right_Motor = rev.CANSparkMax(int(self.prefs.getString("Front_Right_Motor_ID")), self.CANSparkMaxType)
+            elif self.prefs.getString("Front_Right_Motor") == "Talon_FX":
+                self._Front_Right_Motor = ctre.TalonFX(int(self.prefs.getString("Front_Right_Motor_ID")))
+            elif self.prefs.getString("Front_Right_Motor") == "Talon_SRX":
+                self._Front_Right_Motor = ctre.TalonSRX(int(self.prefs.getString("Front_Right_Motor_ID")))
+            elif self.prefs.getString("Front_Right_Motor") == "Victor_SPX":
+                self._Front_Right_Motor = ctre.VictorSPX(int(self.prefs.getString("Front_Right_Motor_ID")))
+        else:
+            self.prefs.initString("Front_Right_Motor", "Spark_Max")
+            self._Front_Right_Motor = rev.CANSparkMax(int(self.prefs.getString("Front_Right_Motor_ID")), self.CANSparkMaxType)
+        if self.prefs.containsKey("Back_Right_Motor"):
+            if self.prefs.containsKey("Back_Right_Motor_ID"):
+                pass
+            else:
+                self.prefs.initInt("Back_Right_Motor", "2")
+            if self.prefs.getString("Back_Right_Motor") == "Spark_Max":
+                self._Back_Right_Motor = rev.CANSparkMax(int(self.prefs.getString("Back_Right_Motor_ID")), self.CANSparkMaxType)
+            elif self.prefs.getString("Back_Right_Motor") == "Talon_FX":
+                self._Back_Right_Motor = ctre.TalonFX(int(self.prefs.getString("Back_Right_Motor_ID")))
+            elif self.prefs.getString("Back_Right_Motor") == "Talon_SRX":
+                self._Back_Right_Motor = ctre.TalonSRX(int(self.prefs.getString("Back_Right_Motor_ID")))
+            elif self.prefs.getString("Back_Right_Motor") == "Victor_SPX":
+                self._Back_Right_Motor = ctre.VictorSPX(int(self.prefs.getString("Back_Right_Motor_ID")))
+        else:
+            self.prefs.initString("Back_Right_Motor", "Spark_Max")
+            self._Back_Right_Motor = rev.CANSparkMax(int(self.prefs.getString("Back_Right_Motor_ID")), self.CANSparkMaxType)
+        if self.prefs.containsKey("Back_Left_Motor"):
+            if self.prefs.containsKey("Back_Left_Motor_ID"):
+                pass
+            else:
+                self.prefs.initInt("Back_Left_Motor", "3")
+            if self.prefs.getString("Back_Left_Motor") == "Spark_Max":
+                self._Back_Left_Motor = rev.CANSparkMax(int(self.prefs.getString("Back_Left_Motor_ID")), self.CANSparkMaxType)
+            elif self.prefs.getString("Back_Left_Motor") == "Talon_FX":
+                self._Back_Left_Motor = ctre.TalonFX(int(self.prefs.getString("Back_Left_Motor_ID")))
+            elif self.prefs.getString("Back_Left_Motor") == "Talon_SRX":
+                self._Back_Left_Motor = ctre.TalonSRX(int(self.prefs.getString("Back_Left_Motor_ID")))
+            elif self.prefs.getString("Back_Left_Motor") == "Victor_SPX":
+                self._Back_Left_Motor = ctre.VictorSPX(int(self.prefs.getString("Back_Left_Motor_ID")))
+        else:
+            self.prefs.initString("Back_Left_Motor", "Spark_Max")
+            self._Back_Left_Motor = rev.CANSparkMax(int(self.prefs.getString("Back_Left_Motor_ID")), self.CANSparkMaxType)
+        if self.prefs.containsKey("Shooter_Motor"):
+            if self.prefs.containsKey("Shooter_Motor_ID"):
+                pass
+            else:
+                self.prefs.initInt("Shooter_Motor", "4")
+            if self.prefs.getString("Shooter_Motor") == "Spark_Max":
+                self._Shooter_Motor = rev.CANSparkMax(int(self.prefs.getString("Shooter_Motor_ID")), self.CANSparkMaxType)
+            elif self.prefs.getString("Shooter_Motor") == "Talon_FX":
+                self._Shooter_Motor = ctre.TalonFX(int(self.prefs.getString("Shooter_Motor_ID")))
+            elif self.prefs.getString("Shooter_Motor") == "Talon_SRX":
+                self._Shooter_Motor = ctre.TalonSRX(int(self.prefs.getString("Shooter_Motor_ID")))
+            elif self.prefs.getString("Shooter_Motor") == "Victor_SPX":
+                self._Shooter_Motor = ctre.VictorSPX(int(self.prefs.getString("Shooter_Motor_ID")))
+        else:
+            self.prefs.initString("Shooter_Motor", "Talon_FX")
+            self._Shooter_Motor = ctre.TalonFX(int(self.prefs.getString("Shooter_Motor_ID")))
+        if self.prefs.containsKey("Intake_Motor"):
+            if self.prefs.containsKey("Intake_Motor_ID"):
+                pass
+            else:
+                self.prefs.initInt("Intake_Motor", "5")
+            if self.prefs.getString("Intake_Motor") == "Spark_Max":
+                self._Intake_Motor = rev.CANSparkMax(int(self.prefs.getString("Intake_Motor_ID")), self.CANSparkMaxType)
+            elif self.prefs.getString("Intake_Motor") == "Talon_FX":
+                self._Intake_Motor = ctre.TalonFX(int(self.prefs.getString("Intake_Motor_ID")))
+            elif self.prefs.getString("Intake_Motor") == "Talon_SRX":
+                self._Intake_Motor = ctre.TalonSRX(int(self.prefs.getString("Intake_Motor_ID")))
+            elif self.prefs.getString("Intake_Motor") == "Victor_SPX":
+                self._Intake_Motor = ctre.VictorSPX(int(self.prefs.getString("Intake_Motor_ID")))
+        else:
+            self.prefs.initString("Intake_Motor", "Talon_SRX")
+            self._Intake_Motor = ctre.TalonSRX(int(self.prefs.getString("Intake_Motor_ID")))
         # Start Network Tables Stuff
 
         def getNetworkTables():
@@ -198,7 +277,7 @@ class MyRobot(wpilib.TimedRobot):
             nonlocal self
             if self.smartDash.getValue("Brownout_Detection"):
                 if self.smartDash.containsKey("Brownout"):
-                    if self.driverStation.getBatteryVoltage() < 6.8:
+                    if self.driverstation.getBatteryVoltage() < 6.8:
                         self.smartDash.putValue("Brownout", "BROWNOUT WARNING")
                         self._Front_Left_Motor.set(0)
                         self._Front_Right_Motor.set(0)
