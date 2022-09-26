@@ -19,13 +19,16 @@ class MyRobot(wpilib.TimedRobot):
 
         # Define Things
         self.controllers = []
-        for i in range(1, self.driverStation.kJoystickPorts + 1):
-            if self.driverStation.isJoystickConnected(i):
-                self.controllers.append([self.driverStation.getStickButtonCount(i), self.driverStation.getStickAxisCount(i)])
+        # for i in range(1, self.driverStation.kJoystickPorts + 1):
+        #     if self.driverStation.isJoystickConnected(i):
+        #         self.controllers.append([self.driverStation.getStickButtonCount(i), self.driverStation.getStickAxisCount(i)])
         # self.motors = [["SLY", 0, "SM"], ["SRY", 1, "SM"], ]
         # TODO: Automate in the future: https://robotpy.readthedocs.io/projects/wpilib/en/stable/wpilib/CANStatus.html
         # TODO: Automate by scanning data https://robotpy.readthedocs.io/projects/wpilib/en/stable/wpilib/CANData.html
         # TODO: Make robot remember different controller configs https://robotpy.readthedocs.io/projects/wpilib/en/stable/wpilib/Preferences.html
+        # TODO: Do above with https://robotpy.readthedocs.io/projects/wpilib/en/stable/wpilib/DriverStation.html#wpilib.DriverStation.getJoystickType
+        # Order of controller ID's doesn't matter. Just the amount of each type
+        # Do controller config but with motors too
         self.prefs = wpilib.Preferences()
         self.CANSparkMaxType = rev.CANSparkMaxLowLevel.MotorType(0)  # 0 is Brushed and 1 is Brushless
         if self.prefs.containsKey("Front_Left_Motor"):
