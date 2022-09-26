@@ -18,15 +18,16 @@ class MyRobot(wpilib.TimedRobot):
         self.brownoutDetection = True  # Enable Brownout Detection
 
         # Define Things
-        self.motors = [["SLY", 0, "SM"], ["SRY", 1, "SM"], ]
+        self.controllers = []
+        for i in range(1, self.driverStation.kJoystickPorts + 1):
+            if self.driverStation.isJoystickConnected(i):
+                self.controllers.append([self.driverStation.getStickButtonCount(i), self.driverStation.getStickAxisCount(i)])
+        # self.motors = [["SLY", 0, "SM"], ["SRY", 1, "SM"], ]
         # TODO: Automate in the future: https://robotpy.readthedocs.io/projects/wpilib/en/stable/wpilib/CANStatus.html
         # TODO: Automate by scanning data https://robotpy.readthedocs.io/projects/wpilib/en/stable/wpilib/CANData.html
+        # TODO: Make robot remember different controller configs https://robotpy.readthedocs.io/projects/wpilib/en/stable/wpilib/Preferences.html
         self.prefs = wpilib.Preferences()
-        if self.prefs.containsKey("Spark_Max_Brushed"):
-            self.CANSparkMaxType = rev.CANSparkMaxLowLevel.MotorType(int(self.prefs.getString("Spark_Max_Brushed")))
-        else:
-            self.prefs.initString("Front_Left_Motor", "0")
-            self.CANSparkMaxType = rev.CANSparkMaxLowLevel.MotorType(0)  # 0 is Brushed and 1 is Brushless
+        self.CANSparkMaxType = rev.CANSparkMaxLowLevel.MotorType(0)  # 0 is Brushed and 1 is Brushless
         if self.prefs.containsKey("Front_Left_Motor"):
             if self.prefs.containsKey("Front_Left_Motor_ID"):
                 pass
@@ -218,8 +219,7 @@ class MyRobot(wpilib.TimedRobot):
         # Initialize Brownout Detection 1 seconds after init. Cycles every 0.25 seconds
         self.addPeriodic(brownoutDetection, 0.25, offset=1)
 
-        # Define Game Stuff getJoystickIsXbox()
-        self.controller = wpilib.XboxController(0)
+        # Define Game Stuff
         self.timer = wpilib.Timer()
 
     def autonomousInit(self):
@@ -237,13 +237,8 @@ class MyRobot(wpilib.TimedRobot):
         #     self.drive.arcadeDrive(0, 0)  # Stop robot
 
     def teleopPeriodic(self):
-        # TODO: Implement pnumatics and climber boi
-        self._Shooter_Motor.set(self.controller.getRightTriggerAxis())
-        self._Intake_Motor.set(self.controller.getLeftTriggerAxis())
-        self._Back_Left_Motor.set(self.controller.getLeftY())
-        self._Front_Left_Motor.set(self.controller.getLeftY())
-        self._Back_Right_Motor.set(self.controller.getRightY())
-        self._Front_Right_Motor.set(self.controller.getRightY())
+        # TODO: Implement pnumatics and motors
+        pass
 
 
 if __name__ == "__main__":
