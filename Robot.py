@@ -10,7 +10,6 @@ class MyRobot(wpilib.TimedRobot):
 
         self.pdp = wpilib.PowerDistribution()
         self.bia = wpilib.BuiltInAccelerometer()
-        self.driverStation = wpilib.DriverStation()
         NetworkTables.initialize()
         self.smartDash = NetworkTables.getTable("SmartDashboard")
 
@@ -19,10 +18,6 @@ class MyRobot(wpilib.TimedRobot):
 
         # Define Things
         self.controllers = []
-        # for i in range(1, self.driverStation.kJoystickPorts + 1):
-        #     if self.driverStation.isJoystickConnected(i):
-        #         self.controllers.append([self.driverStation.getStickButtonCount(i), self.driverStation.getStickAxisCount(i)])
-        # self.motors = [["SLY", 0, "SM"], ["SRY", 1, "SM"], ]
         # TODO: Automate in the future: https://robotpy.readthedocs.io/projects/wpilib/en/stable/wpilib/CANStatus.html
         # TODO: Automate by scanning data https://robotpy.readthedocs.io/projects/wpilib/en/stable/wpilib/CANData.html
         # TODO: Make robot remember different controller configs https://robotpy.readthedocs.io/projects/wpilib/en/stable/wpilib/Preferences.html
@@ -202,7 +197,7 @@ class MyRobot(wpilib.TimedRobot):
             nonlocal self
             if self.smartDash.getValue("Brownout_Detection"):
                 if self.smartDash.containsKey("Brownout"):
-                    if self.driverStation.getBatteryVoltage() < 6.8:
+                    if wpilib.DriverStation.getBatteryVoltage() < 6.8:
                         self.smartDash.putValue("Brownout", "BROWNOUT WARNING")
                         self._Front_Left_Motor.set(0)
                         self._Front_Right_Motor.set(0)
