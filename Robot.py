@@ -24,6 +24,34 @@ class MyRobot(wpilib.TimedRobot):
         # TODO: Do above with https://robotpy.readthedocs.io/projects/wpilib/en/stable/wpilib/DriverStation.html#wpilib.DriverStation.getJoystickType
         # Order of controller ID's doesn't matter. Just the amount of each type
         # Do controller config but with motors too
+
+        self.CAN_Motors = []
+
+        # for x in range(1, 64):
+        #     try:
+        #         ccd = wpilib.CAN(deviceId=x)
+        #         if ccd.kTeamDeviceType == 2:
+        #             self.CAN_Motors.append({"ID": x, "Manufacturer": ccd.kTeamManufacturer})
+        #     except Exception as e:
+        #         pass
+
+        for x in range(1, 64):
+            try:
+                pass
+            except Exception as e:
+                pass
+            try:
+                pass
+            except Exception as e:
+                pass
+            try:
+                pass
+            except Exception as e:
+                pass
+
+
+
+
         self.prefs = wpilib.Preferences()
         self.CANSparkMaxType = rev.CANSparkMaxLowLevel.MotorType(0)  # 0 is Brushed and 1 is Brushless
         if self.prefs.containsKey("Front_Left_Motor"):
