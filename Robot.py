@@ -17,6 +17,7 @@ class MyRobot(wpilib.TimedRobot):
         self.brownoutDetection = True  # Enable Brownout Detection
 
         # Define Things
+        # Controller stuff: self.Controller_Controllers = {"RightSide": }
         self.Motor_Controllers = {1: "RightSide", 9: "Shooter", 11: "Elevator", 2: "LeftSide", 5: "Intake"}
         self.CAN_Motors = []
         # Get all Motors
@@ -220,12 +221,12 @@ class MyRobot(wpilib.TimedRobot):
                 if self.smartDash.containsKey("Brownout"):
                     if wpilib.DriverStation.getBatteryVoltage() < 6.8:
                         self.smartDash.putValue("Brownout", "BROWNOUT WARNING")
-                        self._Front_Left_Motor.set(0)
-                        self._Front_Right_Motor.set(0)
-                        self._Back_Right_Motor.set(0)
-                        self._Back_Left_Motor.set(0)
-                        self._Shooter_Motor.set(0)
-                        self._Intake_Motor.set(0)
+                        for motor in self.CAN_Motors:
+                            # ctre.ControlMode.PercentOutput
+                            if motor["Type"] != "SparkMax":
+                                motor["Object"].set(ctre.ControlMode.PercentOutput, 0)
+                            else:
+                                motor["Object"].set(0)
                 else:
                     self.smartDash.setDefaultValue("Brownout", "Not Detected")
             else:
@@ -270,6 +271,7 @@ class MyRobot(wpilib.TimedRobot):
         #     self.drive.arcadeDrive(0, 0)  # Stop robot
 
     def teleopPeriodic(self):
+        # self.Motor_Controllers = {1: "RightSide", 9: "Shooter", 11: "Elevator", 2: "LeftSide", 5: "Intake"}
         for motor in self.CAN_Motors:
             # ctre.ControlMode.PercentOutput
             if motor["Type"] != "SparkMax":
