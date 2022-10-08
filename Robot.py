@@ -11,12 +11,21 @@ class MyRobot(wpilib.TimedRobot):
     def robotInit(self):
         self.pdp = wpilib.PowerDistribution()
         self.bia = wpilib.BuiltInAccelerometer()
+        self.pcm = wpilib.PneumaticsControlModule()
+        self.safePSI = 20
         NetworkTables.initialize()
         self.smartDash = NetworkTables.getTable("SmartDashboard")
 
         self.brownoutDetection = True  # Enable Brownout Detection
 
         # Define Things
+
+        if self.pcm.getCompressor():
+            self.compressor = wpilib.Compressor(moduleType=self.pcm.getCompressorConfigType())
+            self.solenoid = self.pcm.makeSolenoid(1)  # Solenoid Number
+        else:
+            wpilib.reportWarning("Compressor Not Found!!!")
+
         # Controller stuff: self.Controller_Controllers = {"RightSide": }
         self.Motor_Controllers = {1: "RightSide", 9: "Shooter", 11: "Elevator", 2: "LeftSide", 5: "Intake"}
         self.CAN_Motors = []
@@ -59,8 +68,6 @@ class MyRobot(wpilib.TimedRobot):
         # Start Network Tables Stuff
 
         def getNetworkTables():
-            # Define Dynamic values
-            # TODO: Make update rate a non-persistant variable https://robotpy.readthedocs.io/projects/pynetworktables/en/stable/api.html#networktables.NetworkTablesInstance.setUpdateRate
 
             nonlocal self
             entries = self.smartDash.getEntries("")
@@ -243,6 +250,10 @@ class MyRobot(wpilib.TimedRobot):
         self.timer = wpilib.Timer()
 
     def disabledInit(self):
+        if self.compressor.getPressure() > self.safePSI:
+            self.compressor.stop()
+        else:
+            self.compressor.start()
         for motor in self.CAN_Motors:
             if motor["Type"] != "SparkMax":
                 motor["Object"].set(ctre.ControlMode.PercentOutput, 0)
@@ -250,6 +261,10 @@ class MyRobot(wpilib.TimedRobot):
                 motor["Object"].set(0)
 
     def disabledPeriodic(self):
+        if self.compressor.getPressure() > self.safePSI:
+            self.compressor.stop()
+        else:
+            self.compressor.start()
         for motor in self.CAN_Motors:
             if motor["Type"] != "SparkMax":
                 motor["Object"].set(ctre.ControlMode.PercentOutput, 0)
@@ -271,6 +286,11 @@ class MyRobot(wpilib.TimedRobot):
         #     self.drive.arcadeDrive(0, 0)  # Stop robot
 
     def teleopPeriodic(self):
+        # TODO: Get pressure rating
+        if self.compressor.getPressure() > self.safePSI:
+            self.compressor.stop()
+        else:
+            self.compressor.start()
         # self.Motor_Controllers = {1: "RightSide", 9: "Shooter", 11: "Elevator", 2: "LeftSide", 5: "Intake"}
         for motor in self.CAN_Motors:
             # ctre.ControlMode.PercentOutput
@@ -278,6 +298,7 @@ class MyRobot(wpilib.TimedRobot):
                 motor["Object"].set(ctre.ControlMode.PercentOutput, 0)
             else:
                 motor["Object"].set(0)
+        # If Controller Button: self.solenoid.toggle()
 
 
 if __name__ == "__main__":
