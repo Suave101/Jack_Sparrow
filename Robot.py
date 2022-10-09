@@ -12,7 +12,7 @@ class MyRobot(wpilib.TimedRobot):
         self.pdp = wpilib.PowerDistribution()
         self.bia = wpilib.BuiltInAccelerometer()
         self.pcm = wpilib.PneumaticsControlModule()
-        self.safePSI = 20
+        self.safePSI = 120
         NetworkTables.initialize()
         self.smartDash = NetworkTables.getTable("SmartDashboard")
 
