@@ -8,3 +8,11 @@ CeCe TODO: if self.controller.getAButtonPressed():/n self.solenoid.toggle() do i
 CeCe Resources:
 https://robotpy.readthedocs.io/projects/wpilib/en/stable/wpilib/XboxController.html#wpilib.XboxController.getAButtonPressed
 https://robotpy.readthedocs.io/projects/wpilib/en/stable/wpilib/Solenoid.html
+
+CeCe Learn to Code:
+https://www.youtube.com/playlist?list=PLkCV0SkyKAS075P_BEGacz8aPPtrVdKK-
+https://robotpy.readthedocs.io/en/stable/guide/python.html
+https://robotpy.readthedocs.io/en/stable/guide/anatomy.html#create-your-robot-code
+
+CeCe For at HSU:
+https://medium.com/@Suave101/flying-tello-edu-drones-in-python-7d3dc597b8a1
