@@ -1,0 +1,3 @@
+TODO: Idiot_Proofing by making the controllers control by an exponent of 2
+TODO: Implement NTC
+TODO: Use https://api.qrserver.com/v1/create-qr-code/?size=125x150&data=test
