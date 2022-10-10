@@ -1,3 +1,10 @@
-TODO: Idiot_Proofing by making the controllers control by an exponent of 2
-TODO: Implement NTC
-TODO: Use https://api.qrserver.com/v1/create-qr-code/?size=125x150&data=test
+Xander TODO: Idiot_Proofing by making the controllers control by an exponent of 2
+Xander TODO: Implement NTC
+Xander TODO: Use https://api.qrserver.com/v1/create-qr-code/?size=125x150&data=test
+
+CeCe TODO: https://github.com/Suave101/Jack_Sparrow/blob/master/cecesrobot.py
+CeCe TODO: Ignore first 6 lines of code
+CeCe TODO: if self.controller.getAButtonPressed():/n self.solenoid.toggle() do it in teleop periodic
+CeCe Resources:
+https://robotpy.readthedocs.io/projects/wpilib/en/stable/wpilib/XboxController.html#wpilib.XboxController.getAButtonPressed
+https://robotpy.readthedocs.io/projects/wpilib/en/stable/wpilib/Solenoid.html
