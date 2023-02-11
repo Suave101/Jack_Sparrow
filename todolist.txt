@@ -1,18 +1,3 @@
 Xander TODO: Idiot_Proofing by making the controllers control by an exponent of 2
 Xander TODO: Implement NTC
 Xander TODO: Use https://api.qrserver.com/v1/create-qr-code/?size=125x150&data=test
-
-CeCe TODO: https://github.com/Suave101/Jack_Sparrow/blob/master/cecesrobot.py
-CeCe TODO: Ignore first 6 lines of code
-CeCe TODO: if self.controller.getAButtonPressed():/n self.solenoid.toggle() do it in teleop periodic
-CeCe Resources:
-https://robotpy.readthedocs.io/projects/wpilib/en/stable/wpilib/XboxController.html#wpilib.XboxController.getAButtonPressed
-https://robotpy.readthedocs.io/projects/wpilib/en/stable/wpilib/Solenoid.html
-
-CeCe Learn to Code:
-https://www.youtube.com/playlist?list=PLkCV0SkyKAS075P_BEGacz8aPPtrVdKK-
-https://robotpy.readthedocs.io/en/stable/guide/python.html
-https://robotpy.readthedocs.io/en/stable/guide/anatomy.html#create-your-robot-code
-
-CeCe For at HSU:
-https://medium.com/@Suave101/flying-tello-edu-drones-in-python-7d3dc597b8a1
